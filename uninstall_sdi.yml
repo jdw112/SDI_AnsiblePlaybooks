@@ -1,0 +1,23 @@
+---
+# 
+# @author Jason Williams
+# Security Directory Integrator v7.2 Installation
+# Playbook built using SDI 7.2.0 and Red Hat 8.5
+
+- name: Play SDI - Uninstall Security Directory Integrator
+# Hosts where SDI product is installed
+  hosts: iam_sdi_hosts
+  vars_files:
+    - variables.yml
+  become_user: root
+  become: true
+
+  tasks:
+    - name: Manually remove SDI from {{ sdi_root_dir }}
+      file:
+        path: '{{ item }}'
+        state: absent
+      with_items:
+        - '{{ sdi_root_dir }}'
+        - /var/.com.zerog.registry.xml
+...

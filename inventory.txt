@@ -1,0 +1,8 @@
+[iam_sdi_hosts]
+sdi1 ansible_host=192.168.80.128 ansible_ssh_pass= ansible_ssh_user=root
+
+[iam_sds_hosts]
+sds1 ansible_host=192.168.80.128 ansible_ssh_pass= ansible_ssh_user=root
+
+[iam_db_hosts]
+db1 ansible_host=192.168.80.128 ansible_ssh_pass= ansible_ssh_user=root

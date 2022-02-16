@@ -1,0 +1,41 @@
+---
+- name: Play SDI - Install SDI Fixpack and JVM Update
+# Hosts where SDI product is installed
+  hosts: iam_sdi_hosts
+  vars_files:
+    - variables.yml 
+  become_user: root
+  become: true
+
+  tasks:
+    - name: Ensure temp working directory exists
+      file:
+        path: /tmp/ansible_temp
+        state: directory
+
+    - name: Backup existing '{{ sdi_root_dir}}'/jvm directory
+      command: mv '{{ sdi_root_dir}}''/jvm' '{{ sdi_root_dir}}''/jvmold'
+      args:
+        creates: '{{ sdi_root_dir}}''/jvm'
+
+    - name: Extrace JVM Update to '{{ sdi_root_dir}}'/jvm
+      ansible.builtin.unarchive:
+        src: install_images/SDI/ibm-java-jre-8.0-6.25-linux-x86_64.tgz
+        dest: '{{ sdi_root_dir}}''/jvm'
+
+    - name: Extract fix pack into $HOME/ansible_temp
+      ansible.builtin.unarchive:
+        src: install_images/SDI/7.2.0-ISS-SDI-FP0007.zip
+        dest: /tmp/ansible_temp
+
+    - name: Move UpdateInstall.jar to directory '{{ sdi_root_dir}}'/maintenance/
+      shell: mv /tmp/ansible_temp/7.2.0-ISS-SDI-FP0007/UpdateInstaller.jar '{{ sdi_root_dir}}'/maintenance/UpdateInstaller.jar
+
+    - name: Applying 7.2.0-ISS-SDI-FP0007
+      shell: "'{{ sdi_root_dir}}'/bin/applyUpdates.sh -update /tmp/ansible_temp/7.2.0-ISS-SDI-FP0007/SDI-7.2-FP0007.zip"
+
+    - name: Remove temp working directory
+      file:
+        path: /tmp/ansible_temp
+        state: absent
+...
