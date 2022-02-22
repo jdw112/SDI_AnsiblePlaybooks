@@ -1,10 +1,11 @@
 ---
 # 
 # @author Jason Williams
-# Security Directory Integrator v7.2 Installation
+# Security Directory Integrator v7.2 - Manually Uninstall the product
+# NOTE: This removes the registry for ALL installations of SDI or TDI on the host
 # Playbook built using SDI 7.2.0 and Red Hat 8.5
 
-- name: Play SDI - Uninstall Security Directory Integrator
+- name: Play SDI - Remove Security Directory Integrator
 # Hosts where SDI product is installed
   hosts: iam_sdi_hosts
   vars_files:
@@ -13,7 +14,7 @@
   become: true
 
   tasks:
-    - name: Manually remove SDI from {{ sdi_root_dir }}
+    - name: Delete SDI from system
       file:
         path: '{{ item }}'
         state: absent

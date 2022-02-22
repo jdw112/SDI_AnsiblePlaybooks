@@ -37,12 +37,12 @@
   # Install SDI product
     - name: Extrace SDI Installer to temp directory 
       ansible.builtin.unarchive:
-        src: install_images/SDI/SDI_7.2_XLIN86_64_ML.tar
+        src: install_images/SDI_7.2_XLIN86_64_ML.tar
         dest: '{{ temp }}'
 
     - name: Copy silent install property file to host
       copy:
-        src: install_images/SDI/CustomInstallRspSDI72.txt
+        src: install_images/CustomInstallRspSDI72.txt
         dest: '{{ temp }}'
 
     - name: Update install directory in silent property file

@@ -1,10 +1,12 @@
 ---
 # 
 # @author Jason Williams
-# Security Directory Integrator v7.2 Installation
+# Security Directory Integrator v7.2 fix pack installation
 # Playbook built using SDI 7.2.0 and Red Hat 8.5
 
 - name: Play SDI - Install SDI Fixpack and JVM Update
+# Playbook built using SDI 7.2.0-ISS-SDI-FP0008 and IBM JVM 8.0.6.25
+
 # Hosts where the Security Directory Integrator V7.2(SDI) product is installed
   hosts: iam_sdi_hosts
   vars_files:
@@ -24,10 +26,10 @@
 
     - name: Extrace JVM Update 
       unarchive:
-        src: install_images/SDI/ibm-java-jre-8.0-6.25-linux-x86_64.tgz
+        src: install_images/ibm-java-jre-8.0-6.25-linux-x86_64.tgz
         dest: '{{ sdi_root_dir}}'
 
-    - name: Prepare the {{ sdi_root_dir }}/jvm directory 
+    - name: Prepare the jvm directory 
       file: 
         path: '{{ sdi_root_dir }}/jvm'
         state: absent 
@@ -57,7 +59,7 @@
   # INSTALLING SDI FIXPACK 
     - name: Extract fix pack into {{ temp }}
       unarchive:
-        src: install_images/SDI/7.2.0-ISS-SDI-FP0008.zip
+        src: install_images/7.2.0-ISS-SDI-FP0008.zip
         dest: '{{ temp }}'
 
     - name: Remove previous UpdateInstaller.jar
@@ -68,8 +70,8 @@
     - name: Applying 7.2.0-ISS-SDI-FP0008
       command: "{{ item }} chdir={{ sdi_root_dir }}/"
       with_items:
-      - mv {{ temp }}/7.2.0-ISS-SDI-FP0008/7.2.0-ISS-SDI-FP0008/UpdateInstaller.jar maintenance/UpdateInstaller.jar
-      - ./bin/applyUpdates.sh -update {{ temp }}/7.2.0-ISS-SDI-FP0008/7.2.0-ISS-SDI-FP0008/SDI-7.2-FP0008.zip
+      - mv {{ temp }}/7.2.0-ISS-SDI-FP0008/UpdateInstaller.jar maintenance/UpdateInstaller.jar
+      - ./bin/applyUpdates.sh -update {{ temp }}/7.2.0-ISS-SDI-FP0008/SDI-7.2-FP0008.zip
       - chmod 744 ./bin/updateLog4j.sh ./bin/removeAMC.sh
       - ./bin/updateLog4j.sh
       - ./bin/removeAMC.sh
@@ -80,7 +82,8 @@
         path: '{{ temp }}' 
         state: absent
 
-  # UPDATE GLOBAL PROPERTIES
+  # Update Global properties
+
     - name: Insert/Update TLS properties in {{ sdi }}/etc/global.properties
       blockinfile:
         path: '{{ sdi_root_dir }}/etc/global.properties'
