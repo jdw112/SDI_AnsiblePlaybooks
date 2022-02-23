@@ -5,7 +5,7 @@
 ### Installing Ansible
 
 First, you'll need to install Ansible on the machine that will execute your playbooks (called the control node).  The
-control node can be as simple as a laptop, and can be running any Unix-like OS (Linux, BSD, macOS).
+control node can be as simple as a laptop or virtual machine, and can be running any Unix-like OS (Linux, BSD, macOS).
 
 You'll want to follow the
 [Ansible documentation](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-the-control-node)
