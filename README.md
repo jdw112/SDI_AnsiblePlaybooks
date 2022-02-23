@@ -22,11 +22,7 @@ $ cd SDI_AnsiblePlaybooks/
 
 ### Customize connection parameters
 
-Update the supplied inventory file. Authentication credentials are not included, and should be specified either on the CLI, or in a seperate file like so:
-
-```
-$ ansible-playbook -i inventory install_sdi.yml -e @creds.yml
-```
+Update the supplied inventory file. Authentication credentials are not included, and should be specified either on the CLI, or in the inventory file
 
 ### Customize variable parameters
 ```
@@ -54,13 +50,7 @@ You're now ready to start using these playbooks.
 You can use these playbooks as a base by cloning this repository.  Each of them is documented with how to run them via
 `ansible-playbook` and their customization options.
 
-* install_sdi.yml - Install Security Directory Integrator v7.2 on host.
-* uninstall_sdi.yml - Manually Uninstall the product
-* install_sdi_fixpack_FP0008.yml - Install product fix pack 
-* install_isim_dispatcher.yml - Install ISIM RMI Dispatcher product
-
-
-
-
-
-
+* install_sdi.yml - Install Security Directory Integrator (SDI) v7.2 on host.
+* uninstall_sdi.yml - Manually Uninstall SDI on host
+* install_sdi_fixpack_FP0008.yml - Install product fix pack on host
+* install_isim_dispatcher.yml - Install ISIM RMI Dispatcher product on host
