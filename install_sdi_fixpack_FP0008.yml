@@ -15,10 +15,11 @@
   become: true
 
   tasks:
-    - name: Create temp working directory
-      file:
-        path: '{{ temp }}'
+    - name: Create temporary build directory
+      ansible.builtin.tempfile:
         state: directory
+        suffix: build
+      register: tempdir
 
   # INSTALLING JVM UPDATE
     - name: Backup {{ sdi_root_dir }}/jvm
@@ -57,10 +58,10 @@
         backup: yes
 
   # INSTALLING SDI FIXPACK 
-    - name: Extract fix pack into {{ temp }}
+    - name: Extract fix pack into {{ tempdir.path }}
       unarchive:
         src: install_images/7.2.0-ISS-SDI-FP0008.zip
-        dest: '{{ temp }}'
+        dest: '{{ tempdir.path }}'
 
     - name: Remove previous UpdateInstaller.jar
       file:
@@ -70,17 +71,18 @@
     - name: Applying 7.2.0-ISS-SDI-FP0008
       command: "{{ item }} chdir={{ sdi_root_dir }}/"
       with_items:
-      - mv {{ temp }}/7.2.0-ISS-SDI-FP0008/UpdateInstaller.jar maintenance/UpdateInstaller.jar
-      - ./bin/applyUpdates.sh -update {{ temp }}/7.2.0-ISS-SDI-FP0008/SDI-7.2-FP0008.zip
+      - mv {{ tempdir.path }}/7.2.0-ISS-SDI-FP0008/UpdateInstaller.jar maintenance/UpdateInstaller.jar
+      - ./bin/applyUpdates.sh -update {{ tempdir.path }}/7.2.0-ISS-SDI-FP0008/SDI-7.2-FP0008.zip
       - chmod 744 ./bin/updateLog4j.sh ./bin/removeAMC.sh
       - ./bin/updateLog4j.sh
       - ./bin/removeAMC.sh
 
   # REMOVE TEMP DIRECTORY
-    - name: Remove temp working directory
-      file:
-        path: '{{ temp }}' 
+    - name: Remove the registered tempdir directory
+      ansible.builtin.file:
+        path: "{{ tempdir.path }}"
         state: absent
+      when: tempdir.path is defined
 
   # Update Global properties
 

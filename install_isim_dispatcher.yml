@@ -14,20 +14,21 @@
   become: true
 
   tasks:
-    - name: Create temp working directory
-      file:
-        path: '{{ temp }}'
+    - name: Create temporary build directory
+      ansible.builtin.tempfile:
         state: directory
+        suffix: build
+      register: tempdir
 
     - name: Extract Dispatcher 
       unarchive:
         src: install_images/SIA_RMI_7140_SDI_7X_MP_ML.zip
-        dest: '{{ temp }}'
+        dest: '{{ tempdir.path }}'
 
     - name: Install ISIM Dispatcher product
       shell: >
           {{ sdi_root_dir }}/jvm/jre/bin/java
-          -jar {{ temp }}/DispatcherInstall.jar
+          -jar {{ tempdir.path }}/DispatcherInstall.jar
           -i silent -DUSER_INSTALL_DIR={{ sdi_root_dir }}
           -DUSER_SELECTED_SOLDIR={{ sdi_root_dir }}/timsol
           -DUSER_INPUT_RMI_PORTNUMBER=1199
@@ -37,16 +38,17 @@
           -DUSER_SYSQUEUE_REPASSWORD_INPUT_RESULT=admin@123
           -DUSER_INPUT_RESULTS_FOR_SSL=Enable
       args:
-        chdir: '{{ temp }}'
+        chdir: '{{ tempdir.path }}'
   #    register: diff_cmd
   #    failed_when: diff_cmd.rc == 0 or diff_cmd.rc >= 2
 
 
   # REMOVE TEMP DIRECTORY
-    - name: Remove temp working directory
-      file:
-        path: '{{ temp }}'
+    - name: Remove the registered tempdir directory
+      ansible.builtin.file:
+        path: "{{ tempdir.path }}"
         state: absent
+      when: tempdir.path is defined
 
   # INSTALL ISIM DISPATCHER
     - name: Insert/Update TLS properties in {{ sdi }}/etc/global.properties
@@ -62,7 +64,7 @@
           # # Optional values for com.ibm.jsse2.overrideDefaultProtocol property (SSL_TLSv2, TLSv1, 
           # # TLSv11,TLSv12). This is a single value property.
           # # ---------------------------------- 
-          com.ibm.di.SSLProtocols=TLSv1.1 
+          com.ibm.di.SSLProtocols=TLSv1.2
           com.ibm.di.SSLServerProtocols=TLSv1.2 
           com.ibm.jsse2.overrideDefaultProtocol=TLSv12 
           com.ibm.jsse2.overrideDefaultTLS=true
