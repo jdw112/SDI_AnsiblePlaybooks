@@ -16,7 +16,7 @@ for installing Ansible on your machine.
 With Ansible installed, clone this repo:
 
 ```
-$ git clone https://github.com/jdw112/SDI_AnsiblePlaybooks
+$ git clone https://github.com/jdw112/SDI_AnsiblePlaybooks.git
 $ cd SDI_AnsiblePlaybooks/
 ```
 
