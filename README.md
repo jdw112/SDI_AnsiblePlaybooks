@@ -27,7 +27,6 @@ Update the supplied inventory file. Authentication credentials are not included,
 ### Customize variable parameters
 ```
 iam_images: ./install_images
-temp: $HOME/ansible_temp
 sdi_root_dir: /opt/IBM/TDI/V7.2
 sdi_solution_directory: /opt/IBM/TDI/Soldir
 ```
