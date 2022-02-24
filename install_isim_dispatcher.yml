@@ -20,6 +20,23 @@
         suffix: build
       register: tempdir
 
+  # KILL ALL SDI PROCESS
+    - name: Get running processes list from remote host
+      ignore_errors: yes
+      shell: "ps -few | grep {{ sdi_root_dir }} | grep -v grep | awk '{print $2}'"
+      register: running_processes
+
+    - name: Kill running processes
+      ignore_errors: yes
+      shell: "kill {{ item }}"
+      with_items: "{{ running_processes.stdout_lines }}"
+
+    - name: Force kill stuck processes
+      ignore_errors: yes
+      shell: "kill -9 {{ item }}"
+      with_items: "{{ running_processes.results | select('failed') | map(attribute='item') | list }}"
+
+  # EXTRACT DISPATCHER PACKAGE
     - name: Extract Dispatcher 
       unarchive:
         src: install_images/SIA_RMI_7140_SDI_7X_MP_ML.zip
