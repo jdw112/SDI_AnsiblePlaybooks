@@ -33,9 +33,8 @@ sdi_solution_directory: /opt/IBM/TDI/Soldir
 ```
 
 ### Customize Install image directory 
-Place the download items in the install_images directory.
+Place the download items in the files/install_images directory.
 ```
-# ./install_images content
 7.2.0-ISS-SDI-FP0008.zip  
 CustomInstallRspSDI72.txt  
 ibm-java-jre-8.0-6.25-linux-x86_64.tgz  
@@ -50,7 +49,16 @@ You're now ready to start using these playbooks.
 You can use these playbooks as a base by cloning this repository.  Each of them is documented with how to run them via
 `ansible-playbook` and their customization options.
 
+```
+# For Example 
+$ cd SDI_AnsiblePlaybooks/
+$ ansible-playbook install_sdi.yml -i inventory.ini
+```
+
 * install_sdi.yml - Install Security Directory Integrator (SDI) v7.2 on host.
 * uninstall_sdi.yml - Manually Uninstall SDI on host
 * install_sdi_fixpack_FP0008.yml - Install product fix pack on host
 * install_isim_dispatcher.yml - Install ISIM RMI Dispatcher product on host
+
+
+
