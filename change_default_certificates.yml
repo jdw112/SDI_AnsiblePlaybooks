@@ -1,0 +1,22 @@
+---
+# 
+# @author Jason Williams
+# Security Directory Integrator v7.2 - Replace default certificates with custom self signed certificates on the SDI Server.
+# Playbook built using SDI 7.2.0 and Red Hat 8.5
+
+- name: Play SDI - Install Security Directory Integrator
+# HOST SYSTEMS
+  hosts: iam_sdi_hosts
+  vars_files:
+    - variables.yml 
+  become_user: root
+  become: true
+
+  tasks:
+
+
+
+
+
+
+...

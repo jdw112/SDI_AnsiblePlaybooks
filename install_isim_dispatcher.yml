@@ -8,9 +8,10 @@
 
 # Hosts where the Security Directory Integrator V7.2(SDI) product is installed
   hosts: iam_sdi_hosts
+  strategy: free
   vars_files:
     - variables.yml 
-#  become_user: root
+  become_user: root
   become: true
 
   tasks:
@@ -21,6 +22,10 @@
       register: tempdir
 
   # KILL ALL SDI PROCESS
+    - name: Prompt user to acknowledge the shutdown of the SDI Server.
+      pause:
+        prompt: By continuing the SDI Server process will be terminated on host. 
+
     - name: Get running processes list from remote host
       ignore_errors: yes
       shell: "ps -few | grep {{ sdi_root_dir }} | grep -v grep | awk '{print $2}'"
@@ -59,15 +64,11 @@
   #    register: diff_cmd
   #    failed_when: diff_cmd.rc == 0 or diff_cmd.rc >= 2
 
-
-  # REMOVE TEMP DIRECTORY
-    - name: Remove the registered tempdir directory
-      ansible.builtin.file:
-        path: "{{ tempdir.path }}"
-        state: absent
-      when: tempdir.path is defined
-
   # INSTALL ISIM DISPATCHER
+    - name: Pause playbook for 3 seconds 
+      pause:
+        seconds: 3
+
     - name: Insert/Update TLS properties in {{ sdi }}/etc/global.properties
       blockinfile:
         path: '{{ sdi_root_dir }}/timsol/solution.properties'
@@ -96,4 +97,10 @@
           # # ---------------------------------- 
           org.eclipse.equinox.http.jetty.ssl.protocol=TLSv1.2
 
+  # REMOVE TEMP DIRECTORY
+    - name: Remove the registered tempdir directory
+      ansible.builtin.file:
+        path: "{{ tempdir.path }}"
+        state: absent
+      when: tempdir.path is defined
 ...

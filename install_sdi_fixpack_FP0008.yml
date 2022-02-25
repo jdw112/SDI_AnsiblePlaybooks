@@ -9,6 +9,7 @@
 
 # Hosts where the Security Directory Integrator V7.2(SDI) product is installed
   hosts: iam_sdi_hosts
+  strategy: free
   vars_files:
     - variables.yml 
   become_user: root
@@ -93,14 +94,10 @@
       - ./bin/updateLog4j.sh
       - ./bin/removeAMC.sh
 
-  # REMOVE TEMP DIRECTORY
-    - name: Remove the registered tempdir directory
-      ansible.builtin.file:
-        path: "{{ tempdir.path }}"
-        state: absent
-      when: tempdir.path is defined
-
   # Update Global properties
+    - name: Pause playbook for 3 seconds 
+      pause:
+        seconds: 3
 
     - name: Insert/Update TLS properties in {{ sdi }}/etc/global.properties
       blockinfile:
@@ -130,4 +127,10 @@
           # # ---------------------------------- 
           org.eclipse.equinox.http.jetty.ssl.protocol=TLSv1.2
 
+  # REMOVE TEMP DIRECTORY
+    - name: Remove the registered tempdir directory
+      ansible.builtin.file:
+        path: "{{ tempdir.path }}"
+        state: absent
+      when: tempdir.path is defined
 ...
