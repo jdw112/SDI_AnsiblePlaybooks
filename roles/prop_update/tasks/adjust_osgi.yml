@@ -1,0 +1,12 @@
+---
+  # Update config.ini
+    - name: Insert/Update osgi properties in {{ sdi_root_dir }}/osgi/configuration/config.ini
+      blockinfile:
+        path: '{{ sdi_root_dir }}/osgi/configuration/config.ini'
+        backup: yes
+        marker: "## <!-- {mark} ANSIBLE MANAGED BLOCK -->"
+        block: |
+          # new properties to clear cache for Dashboard
+          osgi.embedded.cleanupOnSave=true
+          osgi.clean=true
+...

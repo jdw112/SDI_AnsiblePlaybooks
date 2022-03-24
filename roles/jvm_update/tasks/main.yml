@@ -1,0 +1,56 @@
+---
+# tasks file for jvm_update
+
+  #  pre_tasks:
+    - name: Make Sure the mandatory input values are passed (SDI Install Directory and Solution Directory)
+      fail:
+       msg: "sdi_root_dir and sdi_solution_directory are mandatory values to execute the playbook. Variables must be passed as extra variable -e or defined in vars/main.yml"
+      when: sdi_root_dir is not defined and sdi_solution_directory is not defined
+
+  # Check for existing installation
+    - name: Query for existing SDI installation
+      shell: "find {{ sdi_root_dir }}/ibmdisrv"
+      register: sdiExist
+      ignore_errors: true
+
+    - fail: 
+       msg="Stopping playbook. SDI is not installed in '{{ sdi_root_dir}}'. Run the deploy_sdi role."
+      when: "'No such file' in sdiExist.stderr"
+
+  # INSTALLING JVM UPDATE
+    - name: Backup {{ sdi_root_dir }}/jvm
+      command: mv '{{ sdi_root_dir}}/jvm' '{{ sdi_root_dir}}/jvm.backup.'{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}
+
+    - name: Extrace JVM Update 
+      unarchive:
+        src: '{{ ibm_java_archive_package_name }}'
+        dest: '{{ sdi_root_dir}}'
+
+    - name: Prepare the jvm directory 
+      file: 
+        path: '{{ sdi_root_dir }}/jvm'
+        state: absent 
+
+    - name: Apply ibm-java to the {{ sdi_root_dir }}/jvm directory
+      command: mv '{{ sdi_root_dir}}/ibm-java-x86_64-80' '{{ sdi_root_dir}}/jvm'
+
+  # Java.policy must be update to allow Derby to properly start
+    - name: Update port in java.policy file to fix Derby
+      lineinfile: 
+        path: '{{ sdi_root_dir }}/jvm/jre/lib/security/java.policy'
+        # The String to Search
+        regexp: "localhost" 
+        # The String to Replace
+        line: '        permission java.net.SocketPermission "localhost:${derby.drda.portNumber}", "listen";' 
+        state: present
+        backup: yes
+
+    - name: Add deregisterDriver in java.policy file to fix Derby
+      lineinfile:
+        path: '{{ sdi_root_dir }}/jvm/jre/lib/security/java.policy'
+        insertafter: 'localhost'
+        line: '        permission java.sql.SQLPermission "deregisterDriver", "";'
+        firstmatch: yes 
+        backup: yes
+
+...

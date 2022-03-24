@@ -1,0 +1,14 @@
+---
+# tasks file for customjar_update
+
+    - name: copy files to {{ sdi_solution_directory }}/configs
+      copy:
+        src: ./custom_xmls
+        dest: '{{ sdi_solution_directory }}/configs/'
+
+    - name: Update custom xml directory in solution.propertie
+      ansible.builtin.lineinfile:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: 'api.config.folder=.*'
+        line: 'api.config.folder=configs'
+...

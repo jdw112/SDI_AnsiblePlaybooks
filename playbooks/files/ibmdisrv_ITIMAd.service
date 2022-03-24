@@ -1,0 +1,14 @@
+# Start of service file
+[Unit]
+Description=IBM Security Identity Manager RMI Dispatcher ITIMAd
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/bin/bash /opt/IBM/TDI/V7.2/timsol/ITIMAd start
+ExecStop=/bin/bash /opt/IBM/TDI/V7.2/timsol/ITIMAd stop
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+# End of service file

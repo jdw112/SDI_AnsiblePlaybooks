@@ -1,0 +1,14 @@
+# Change Dashboard and REST API state in solution directory
+
+    - name: Change Dashboard state in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+         path: '{{ sdi_solution_directory }}/solution.properties'
+         regexp: 'dashboard.on=.*'      
+         replace: 'dashboard.on={{ dashboard_and_restservice_on | default(true, true) | lower }}'
+         
+    - name: Change REST Server state in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+         path: '{{ sdi_solution_directory }}/solution.properties'
+         regexp: 'api.rest.on=.*'      
+         replace: 'api.rest.on={{ dashboard_and_restservice_on | default(true, true) | lower }}'
+

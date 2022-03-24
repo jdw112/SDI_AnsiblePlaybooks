@@ -1,0 +1,16 @@
+  # Update properties for Dashboard. Found these help/enhanced Dashboard experience
+  
+    - name: Enable tombstone in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: 'com.ibm.di.tm.on=.*'
+        replace: 'com.ibm.di.tm.on=true'
+#        backup: yes
+
+    - name: Adjust tombstone in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: 'com.ibm.di.tm.create.all=.*'
+        replace: 'com.ibm.di.tm.create.all=true'
+#        backup: yes
+

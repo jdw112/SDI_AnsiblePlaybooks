@@ -1,0 +1,49 @@
+---
+ # Install SDI product
+ 
+    - name: Extrace SDI Installer to temp directory 
+      ansible.builtin.unarchive:
+        src: SDI_7.2_XLIN86_64_ML.tar
+        dest: '{{ tempdir.path }}'
+
+    - name: Copy silent install property file to host
+      copy:
+        src: CustomInstallRspSDI72.txt
+        dest: '{{ tempdir.path }}'
+
+#    - name: Update install directory in silent property file
+#      ansible.builtin.lineinfile:
+#        path: '{{ tempdir.path }}/CustomInstallRspSDI72.txt'
+#        regexp: 'USER_INSTALL_DIR'
+#        line: 'USER_INSTALL_DIR={{ sdi_root_dir }}'
+
+    - name: Update silent property continued 
+      replace:
+        path: '{{ tempdir.path }}/CustomInstallRspSDI72.txt'
+        regexp: '/opt/IBM/TDI/V7.2' 
+        replace: '{{ sdi_root_dir }}'
+
+    - name: Update silent property continued
+      lineinfile: 
+        path: '{{ tempdir.path }}/CustomInstallRspSDI72.txt'
+        regexp: 'TDI_SERVER_PORT'
+        line: "TDI_SERVER_PORT={{ sdi_rmi_port | default('1099', true) }}"
+
+    - name: Update solution directory in silent property file
+      ansible.builtin.lineinfile:
+        path: '{{ tempdir.path }}/CustomInstallRspSDI72.txt'
+        regexp: 'TDI_SELECTED_SOLDIR'
+        line: 'TDI_SELECTED_SOLDIR={{ sdi_solution_directory }}'
+
+    - name: Install SDI product
+      shell: > 
+          ./install_sdiv72_linux_x86_64.bin
+          -f '{{ tempdir.path }}/CustomInstallRspSDI72.txt'
+          -D\$TDI_SKIP_VERSION_CHECK\$='true'
+          -D\$TDI_NOSHORTCUTS\$='true'
+          -i silent
+      args:
+        chdir: '{{ tempdir.path }}/linux_x86_64'
+      register: diff_cmd
+      failed_when: diff_cmd.rc == 0 or diff_cmd.rc >= 2
+...      

@@ -1,0 +1,11 @@
+---
+# 
+# @author Jason Williams
+# Security Directory Integrator v7.2 - Manually Uninstall the product
+# NOTE: This removes the registry for ALL installations of SDI or TDI on the host
+# Playbook built using SDI 7.2.0 and Red Hat 8.5
+-
+  hosts: iam_sdi_hosts
+  roles: 
+    - undeploy
+...

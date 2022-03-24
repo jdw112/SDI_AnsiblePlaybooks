@@ -1,3 +1,13 @@
-#OS junk files
+# OS junk files
 [Tt]humbs.db
 *.DS_Store
+
+# Ignore custom_files/ and misc directory
+*/files/custom_jars/*
+*/files/custom_xmls/*
+misc/*
+
+# zip, tar, tgz
+*.zip
+*.tar
+*.tgz

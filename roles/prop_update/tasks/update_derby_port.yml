@@ -1,0 +1,28 @@
+   # Update properties for Derby (System Store) database 
+
+    - name: Collect solution.properties from host
+      fetch:
+        src: '{{ sdi_solution_directory }}/solution.properties'
+        dest: /tmp
+      register: fetched_properties
+       # flat: yes
+
+    - set_fact: 
+        current_port: "{{ lookup('ini', 'com.ibm.di.store.port type=properties file={{ fetched_properties.dest }}' ) }}"
+ 
+    #- debug: msg="the value of the current derby port {{ current_port }}"
+
+    - name: Update derby port references in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: '{{ current_port }}'
+        replace: '{{ sdi_system_store_port }}'
+      when: sdi_system_store_port | default('', true) | trim != ''
+
+    - name: Update derby port in {{ sdi_solution_directory }}/etc/derby.properties
+      ansible.builtin.replace:
+        path: '{{ sdi_solution_directory }}/etc/derby.properties'
+        regexp: 'derby.drda.portNumber=.*'
+        replace: 'derby.drda.portNumber={{ sdi_system_store_port }}'
+      when: sdi_system_store_port | default('', true) | trim != ''      
+

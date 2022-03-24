@@ -1,0 +1,20 @@
+  # Check for solution directory resources
+      
+    - name: Create {{ sdi_solution_directory }} if absent
+      file:
+        path: '{{ sdi_solution_directory }}'
+        state: directory
+      register: sdi_soldir
+
+    - name: Check for {{ sdi_solution_directory }}/solution.properties
+      stat:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+      register: sdi_soldir_prop
+
+    - name : Creating {{ sdi_solution_directory }}
+      shell: > 
+          ./ibmdisrv 
+          -g {{ sdi_solution_directory }}
+      args:
+        chdir: '{{ sdi_root_dir }}'
+      when: sdi_soldir_prop.stat.exists == False

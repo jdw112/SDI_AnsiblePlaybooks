@@ -1,0 +1,15 @@
+  # Update SDI Ports in solution.properties
+  
+    - name: Update rmi port in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: 'api.remote.naming.port=.*'
+        replace: 'api.remote.naming.port={{ sdi_rmi_port }}'
+        backup: yes
+
+    - name: Update web port in {{ sdi_solution_directory }}/solution.properties
+      ansible.builtin.replace:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: 'web.server.port=.*'
+        replace: 'web.server.port={{ sdi_web_port }}'
+        backup: yes

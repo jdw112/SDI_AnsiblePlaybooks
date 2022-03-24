@@ -1,0 +1,33 @@
+---
+# tasks file for collect_versions---
+
+  # Collect SDI Version
+    - name: Check {{ sdi_root_dir }} version
+      shell: >
+          ./bin/applyUpdates.sh
+          -queryreg
+      args:
+        chdir: '{{ sdi_root_dir }}'
+      register: sdi_version
+      ignore_errors: true
+
+  # Collect JVM Version
+    - name: Collect {{ sdi_root_dir }}/jvm/jre/bin/java version
+      shell: >
+          ./jvm/jre/bin/java
+          -fullversion
+      args:
+        chdir: '{{ sdi_root_dir }}'
+      register: java_version
+      ignore_errors: true
+
+  # Collection results
+    - name: Print version information
+      debug:
+        msg: "{{ sdi_version.stdout_lines[2] }}" 
+
+  # Collection results
+    - name: Print version information
+      debug:
+        msg: "{{ java_version.stderr_lines }}" 
+...

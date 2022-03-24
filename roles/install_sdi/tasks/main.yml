@@ -1,0 +1,18 @@
+---
+  # Pre task for SDI activity
+    - name: Create temporary build directory
+      include: pretask.yml
+        
+  # Install operating system prerequisites
+    - name: Install operating system prerequisites
+      include: prerequisites.yml
+ 
+  # Install SDI product
+    - name: Install SDI 
+      include: install.yml
+
+  # Remove Temp Items
+    - name: Remote Temp Ansible Items 
+      include: removetmp.yml
+
+...

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <Appenders>
+        <!-- The default SDI log file -->
+        <RollingFile name="Default" append="true" fileName="logs/ibmdi.log" filePattern="logs/ibmdi-%i.log">
+            <PatternLayout pattern="%d{DEFAULT} [%t] %highlight{%-5level} - %msg%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy minSize="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="3" fileIndex="min" />
+        </RollingFile>
+
+        <!-- Some messages will be logged to the console (standard out) -->
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%t] %-5p - %m%n" />
+        </Console>
+
+        <RollingFile name="SCIM" append="true" fileName="SCIM/logs/audit.log" filePattern="SCIM/logs/audit.%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRollOverStrategy />
+        </RollingFile>
+
+        <!-- Appender - for individual assemblyline -->
+        <RollingFile name="HRFeedAppender" append="true" fileName="logs/HRFeedAL.log" filePattern="logs/HRFeedAL-%i.log">
+            <!-- To filter for ONLY specific string
+            <Filters>
+                <RegexFilter regex=".*alName.*" onMatch="ACCEPT" onMismatch="NEUTRAL" />
+            </Filters>
+            -->
+            <PatternLayout pattern="%d{DEFAULT} [%t] %highlight{%-5level} - %msg%n" />
+            <Policies>
+                <OnStartupTriggeringPolicy minSize="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="3" fileIndex="min" />
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Default" />
+        </Root>
+        <Logger name="Console" level="warn">
+            <AppenderRef ref="CONSOLE" />
+        </Logger>
+
+        <Logger name="com.ibm.di.config" level="warn">
+            <AppenderRef ref="CONSOLE" />
+        </Logger>
+        <Logger name="com.ibm.di.TDIProperties" level="warn">
+            <AppenderRef ref="CONSOLE" />
+        </Logger>
+        <Logger name="com.ibm.di.loader" level="warn"></Logger>
+        <Logger name="org.apache.wink" level="error"></Logger>
+        <Logger name="com.ibm.di.ScimService" level="info" additivity="false">
+            <AppenderRef ref="SCIM" />
+        </Logger>
+
+        <!-- Logger - for individual assemblyline - specific the AL name -->
+        <Logger name="AssemblyLine.AssemblyLines/HRFeed" level="info">
+            <AppenderRef ref="HRFeedAppender" />
+        </Logger>
+
+    </Loggers>
+</Configuration>

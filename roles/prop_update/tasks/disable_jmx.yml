@@ -1,0 +1,15 @@
+  # Update SDI Install/etc/activemq.xml to disable JMX
+    - name: Update {{ sdi_root_dir }}/etc/activemq.xml to disable JMX part 1
+      ansible.builtin.replace:
+        path: '{{ sdi_root_dir }}/etc/activemq.xml'
+        regexp: 'useJmx="true"'
+        replace: 'useJMX="false"'
+        backup: yes
+
+    - name: Update {{ sdi_root_dir }}/etc/activemq.xml to disable JMX part 2
+      ansible.builtin.replace:
+        path: '{{ sdi_root_dir }}/etc/activemq.xml'
+        regexp: 'createConnector="true"'
+        replace: 'createConnector="false"'
+        backup: yes
+

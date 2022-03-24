@@ -1,0 +1,30 @@
+---
+    - name: Insert/Update TLS properties in {{ sdi_root_dir }}/timsol/solution.properties
+      blockinfile:
+        path: '{{ sdi_root_dir }}/timsol/solution.properties'
+        backup: yes
+        marker: "## <!-- {mark} ANSIBLE MANAGED BLOCK -->"
+        block: |
+          # # ---------------------------------- 
+          # # Protocols to enforce SSL protocols in a SDI Server 
+          # # Optional values for com.ibm.di.SSL* property (TLSv1, TLSv1.1, TLSv1.2). 
+          # # This can be a multi-valued comma separated property. 
+          # # Optional values for com.ibm.jsse2.overrideDefaultProtocol property (SSL_TLSv2, TLSv1, 
+          # # TLSv11,TLSv12). This is a single value property.
+          # # ---------------------------------- 
+          com.ibm.di.SSLProtocols=TLSv1.2,TLSv1.3
+          com.ibm.di.SSLServerProtocols=TLSv1.2,TLSv1.3
+          com.ibm.jsse2.overrideDefaultProtocol=TLSv12 
+          com.ibm.jsse2.overrideDefaultTLS=true
+          # # ----- ----------------------------- 
+          # # Protocols used for built-in SDI Server web container traffic. 
+          # # This effects the web.server.port property 
+          # # URLs used by the web.server.port property are
+          # # e.g. 
+          # # https://localhost:1098/dashboard 
+          # # https://localhost:1098/sdi 
+          # # https://localhost:1098/rest 
+          # # ---------------------------------- 
+          org.eclipse.equinox.http.jetty.ssl.protocol=TLSv1.2
+          # #
+...
