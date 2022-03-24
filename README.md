@@ -44,7 +44,6 @@ Place the download items in the following directories.
 ```
 playbook/files/SDI_7.2_XLIN86_64_ML.tar  -  SDI Installer Image
 playbook/files/7.2.0-ISS-SDI-FP0008.zip  -  SDI Fix pack
-playbook/files/CustomInstallRspSDI72.txt  -  SDI silent response file
 playbook/files/ibm-java-jre-8.0-6.25-linux-x86_64.tgz  -  IBM JVM 8 Update
 playbook/files/SIA_RMI_7140_SDI_7X_MP_ML.zip  -  ISIM RMI Dispatcher Install Image
 ```
