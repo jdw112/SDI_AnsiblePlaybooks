@@ -1,0 +1,34 @@
+---
+# tasks file for prop_update
+    - name: Verify {{ sdi_solution_directory }} location
+      include: verify_sdi_solution_directory.yml
+     
+    # Global changes 
+    - name: Update TLS for global.properties
+      include: update_global_tls.yml
+
+    # Solution Directory changes
+    - name: Update TLS for solution.properties
+      include: update_solution_tls.yml
+
+    - name: Update RMI & Web ports in solution.properties
+      include: update_solution_ports.yml
+
+    - name: Update Derby ports
+      include: update_derby_port.yml
+      
+    - name: Adjust Dashboard properties
+      include: dashboard_adjustments.yml 
+      
+    - name: Set Dashboard state
+      include: update_dashboard_rest_state.yml
+      
+    - name: Disable JMX for activemq in {{ sdi_solution_directory }}
+      include: disable_jmx.yml
+
+    - name: Update osgi properties, related to CE/Server startup and Dashboard issues
+      include: adjust_osgi.yml 
+      
+    - name: Workaround for CVE-2020-27216 in global.properties  
+      include: CVE-2020-27216-workaround.yml
+...

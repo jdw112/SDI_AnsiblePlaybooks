@@ -1,0 +1,31 @@
+---
+    - name: Copy ibmdisrv_ITIMAd.service to host
+      copy:
+        src: ibmdisrv_ITIMAd.service
+        dest: '{{ tempdir.path }}'
+
+    - name: Update ibmdisrv_ITIMAd.service 
+      replace:
+        path: '{{ tempdir.path }}/ibmdisrv_ITIMAd.service'
+        regexp: '/opt/IBM/TDI/V7.2' 
+        replace: '{{ sdi_root_dir }}'
+
+    - name: Register ITIMAd in systemctl
+      copy:
+        src: '{{ tempdir.path }}/ibmdisrv_ITIMAd.service'
+        dest: /etc/systemd/system
+        remote_src: yes
+        force: yes
+
+    - name: Pause playbook for 3 seconds 
+      pause:
+        seconds: 3
+
+# TODO - Restart ITIMAd systemctl
+#    - name: Enable and restart service
+#      service: 
+#        name: ibmdisrv_ITIMAd
+#        enabled: true 
+#        state: started
+#      become: true
+...

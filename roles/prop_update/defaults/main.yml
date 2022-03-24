@@ -1,0 +1,6 @@
+---
+# defaults file for prop_update
+# if no other value is supplied in inventory or as a parameter, this value will be used
+sdi_rmi_port: 1099
+sdi_web_port: 1089
+...

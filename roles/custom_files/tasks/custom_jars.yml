@@ -1,0 +1,14 @@
+---
+# tasks file for customjar_update
+
+    - name: copy files to {{ sdi_solution_directory }}/custom_jars
+      copy:
+        src: ./custom_jars
+        dest: '{{ sdi_solution_directory }}/custom_jars/'
+
+    - name: Update custom jar directory in solution.propertie
+      ansible.builtin.lineinfile:
+        path: '{{ sdi_solution_directory }}/solution.properties'
+        regexp: 'com.ibm.di.loader.userjars=.*'
+        line: 'com.ibm.di.loader.userjars=custom_jars'
+...

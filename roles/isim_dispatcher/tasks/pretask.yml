@@ -1,0 +1,25 @@
+  #  pre_tasks:
+    - name: Make Sure the mandatory input values are passed (SDI Install Directory and Solution Directory)
+      fail:
+       msg: "sdi_root_dir and sdi_solution_directory are mandatory values to execute the playbook. Variables must be passed as extra variable -e or defined in vars/main.yml"
+      when: sdi_root_dir is not defined and sdi_solution_directory is not defined
+
+  # Check for existing installation
+    - name: Query for existing SDI installation
+      stat:
+       path: '{{ sdi_root_dir }}/ibmdisrv'
+      register: sdi_installed  
+
+    - name: Abort if SDI is not installed in '{{ sdi_root_dir}}'
+      fail: 
+       msg="Stopping playbook. SDI is not installed in '{{ sdi_root_dir}}'. Run the deploy_sdi role."
+      when: sdi_installed.stat.exists == False
+
+    - name: Create temporary build directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: build
+      register: tempdir
+
+    - name: Shutdown SDI Server if active
+      include: shutdown_sdi.yml

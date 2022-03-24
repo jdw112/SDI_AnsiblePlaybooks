@@ -1,0 +1,26 @@
+---
+  # EXTRACT DISPATCHER PACKAGE
+    - name: Extract Dispatcher 
+      unarchive:
+        src: SIA_RMI_7140_SDI_7X_MP_ML.zip
+        dest: '{{ tempdir.path }}'
+
+
+  # INSTALL ISIM DISPATCHER
+    - name: Install ISIM Dispatcher
+      shell: >
+          {{ sdi_root_dir }}/jvm/jre/bin/java
+          -jar {{ tempdir.path }}/DispatcherInstall.jar
+          -i silent -DUSER_INSTALL_DIR={{ sdi_root_dir }}
+          -DUSER_SELECTED_SOLDIR={{ sdi_root_dir }}/timsol
+          -DUSER_INPUT_RMI_PORTNUMBER=1199
+          -DUSER_INPUT_WS_PORTNUMBER=8081
+          -DUSER_SYSQUEUE_USERNAME_INPUT_RESULT=disp_user
+          -DUSER_SYSQUEUE_PASSWORD_INPUT_RESULT=admin@123
+          -DUSER_SYSQUEUE_REPASSWORD_INPUT_RESULT=admin@123
+          -DUSER_INPUT_RESULTS_FOR_SSL=Enable
+      args:
+        chdir: '{{ tempdir.path }}'
+  #    register: diff_cmd
+  #    failed_when: diff_cmd.rc == 0 or diff_cmd.rc >= 2
+...

@@ -1,0 +1,14 @@
+---
+# tasks file for undeploy
+    - name: Shutdown SDI Server if active
+      include: shutdown_sdi.yml
+
+  # MANUALLY REMOVE PRODUCT
+    - name: Delete SDI from system
+      file:
+        path: '{{ item }}'
+        state: absent
+      with_items:
+        - '{{ sdi_root_dir }}'
+        - /var/.com.zerog.registry.xml
+...

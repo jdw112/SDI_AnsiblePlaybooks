@@ -1,0 +1,9 @@
+# 
+# @author Jason Williams
+# Collect Security Directory Integrator version information
+-
+  hosts: iam_sdi_hosts
+  gather_facts: false
+  roles: 
+    - collect_versions 
+...

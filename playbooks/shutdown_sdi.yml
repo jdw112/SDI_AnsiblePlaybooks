@@ -1,0 +1,22 @@
+---
+# 
+# @author Jason Williams
+# Security Directory Integrator v7.2 - Shutdown
+# Playbook built using SDI 7.2.0 and Red Hat 8.5
+  
+  # KILL ALL SDI PROCESS
+    - name: Get running processes list from remote host
+      ignore_errors: yes
+      shell: "ps -few | grep {{ sdi_root_dir }} | grep -v grep | awk '{print $2}'"
+      register: running_processes
+
+    - name: Kill running processes
+      ignore_errors: yes
+      shell: "kill {{ item }}"
+      with_items: "{{ running_processes.stdout_lines }}"
+
+    - name: Force kill stuck processes
+      ignore_errors: yes
+      shell: "kill -9 {{ item }}"
+      with_items: "{{ running_processes.results | select('failed') | map(attribute='item') | list }}"
+...

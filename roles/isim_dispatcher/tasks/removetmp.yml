@@ -1,0 +1,8 @@
+---
+  # REMOVE TEMP DIRECTORY
+    - name: Remove the registered tempdir directory
+      ansible.builtin.file:
+        path: "{{ tempdir.path }}"
+        state: absent
+      when: tempdir.path is defined
+...

@@ -1,0 +1,21 @@
+---
+# tasks file for isim_dispatcher
+
+    - name: Create temporary build directory
+      include: pretask.yml
+
+    - name: Install ISIM Dispatcher 
+      include: install_dispatcher.yml
+   
+#    - name: Update systemctml with ISIM Service 
+#      include: update_systemctl.yml  
+#      when: ( ansible_distribution == "RedHat" and ansible_distribution_major_version >= '7' ) or 
+#            ( ansible_distribution == "CentOS" and ansible_distribution_major_version >= '7' )
+      
+    - name: Update timsol/solution.properties
+      include: update_solutionprop.yml
+          
+    - name: Cleanup temporary build directory
+      include: removetmp.yml
+
+...

@@ -1,0 +1,12 @@
+# Update properties for Dashboard. I found these help/enhanced Dashboard
+  
+#    - name: Check Dashboard status (true and false)
+#      set_fact: 
+#          dashboard_state: "{{ 'false' if dashboard_state == 'false' else 'true' }}" 
+  
+    - name: Disable Dashboard
+      ansible.builtin.replace:
+         path: '{{ sdi_solution_directory }}/solution.properties'
+         regexp: 'dashboard.on=true'      
+         replace: 'dashboard.on=false'
+

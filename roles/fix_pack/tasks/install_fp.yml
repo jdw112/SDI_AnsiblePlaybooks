@@ -1,0 +1,25 @@
+---
+  # INSTALLING SDI FIXPACK 
+    - name: Extract fix pack into {{ tempdir.path }}
+      unarchive:
+        src: '{{ fix_pack_package_name }}.zip'
+        dest: '{{ tempdir.path }}'
+
+    - name: Copy UpdateInstaller
+      copy:
+        src: '{{ tempdir.path }}/{{ fix_pack_package_name }}/UpdateInstaller.jar'
+        dest: '{{ sdi_root_dir }}/maintenance/'
+        remote_src: yes
+        force: yes
+
+## TODO - execute bin files, if image < FP8
+## TODO - change zip name based on FP release
+
+    - name: Applying {{ fix_pack_package_name }}
+      command: "{{ item }} chdir={{ sdi_root_dir }}/"
+      with_items:
+      - ./bin/applyUpdates.sh -update {{ tempdir.path }}/{{fix_pack_package_name }}/SDI-7.2-FP0008.zip
+      - chmod 744 ./bin/updateLog4j.sh ./bin/removeAMC.sh
+      - ./bin/updateLog4j.sh
+      - ./bin/removeAMC.sh
+...

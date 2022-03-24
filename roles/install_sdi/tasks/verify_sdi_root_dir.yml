@@ -1,0 +1,13 @@
+---
+ # Check for installation directory
+ 
+    - name: Check for existing SDI installation
+      stat:
+        path: '{{ sdi_root_dir }}/ibmdisrv'
+      register: sdi_installed
+
+    - name: 
+      fail: 
+       msg="Stopping playbook. SDI is not installed in '{{ sdi_root_dir}}'. Run the deploy_sdi role."
+      when: "'No such file' in sdiExist.stderr"
+...      

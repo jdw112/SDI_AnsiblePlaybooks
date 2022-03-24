@@ -1,0 +1,12 @@
+# 
+# @author Jason Williams
+# Security Directory Integrator v7.2 - Update SDI Properties on node
+# Playbook built using SDI 7.2.0 and Red Hat 8.5
+
+-
+  hosts: iam_sdi_hosts
+  any_errors_fatal: true
+  gather_facts: false
+  roles:
+  - prop_update
+...

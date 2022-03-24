@@ -2,6 +2,9 @@
 
 ## Getting Started
 
+** This is still a work in progress. README files in this collection were copied from roles repository and need to be edited.
+
+
 ### Installing Ansible
 
 First, you'll need to install Ansible on the machine that will execute your playbooks (called the control node).  The
@@ -22,23 +25,28 @@ $ cd SDI_AnsiblePlaybooks/
 
 ### Customize connection parameters
 
-Update the supplied inventory file. Authentication credentials are not included, and should be specified either on the CLI, or in the inventory file
+Update the supplied inventory.ini file. Authentication credentials are not included, and should be specified either on the CLI, or in the inventory file.
 
 ### Customize variable parameters
 ```
-iam_images: ./install_images
-sdi_root_dir: /opt/IBM/TDI/V7.2
-sdi_solution_directory: /opt/IBM/TDI/Soldir
+sdi_root_dir=/opt/IBM/TDI/V7.2
+sdi_solution_directory=/opt/IBM/TDI/SOLDIR
+sdi_rmi_port=1099
+sdi_web_port=1098
+sdi_system_store_port=1527
+dashboard_and_restservice_on=false
+fix_pack_package_name=7.2.0-ISS-SDI-FP0008
+ibm_java_archive_package_name=ibm-java-jre-8.0-6.25-linux-x86_64.tgz
 ```
 
 ### Customize Install image directory 
-Place the download items in the files/install_images directory.
+Place the download items in the following directories.
 ```
-7.2.0-ISS-SDI-FP0008.zip  
-CustomInstallRspSDI72.txt  
-ibm-java-jre-8.0-6.25-linux-x86_64.tgz  
-SDI_7.2_XLIN86_64_ML.tar 
-SIA_RMI_7140_SDI_7X_MP_ML.zip
+playbook/files/SDI_7.2_XLIN86_64_ML.tar  -  SDI Installer Image
+playbook/files/7.2.0-ISS-SDI-FP0008.zip  -  SDI Fix pack
+playbook/files/CustomInstallRspSDI72.txt  -  SDI silent response file
+playbook/files/ibm-java-jre-8.0-6.25-linux-x86_64.tgz  -  IBM JVM 8 Update
+playbook/files/SIA_RMI_7140_SDI_7X_MP_ML.zip  -  ISIM RMI Dispatcher Install Image
 ```
 
 You're now ready to start using these playbooks.
@@ -50,14 +58,20 @@ You can use these playbooks as a base by cloning this repository.  Each of them 
 
 ```
 # For Example 
-$ cd SDI_AnsiblePlaybooks/
-$ ansible-playbook install_sdi.yml -i inventory.ini
+$ cd SDI_AnsiblePlaybooks
+$ ansible-playbook playbooks/install_sdi.yml -i inventory.ini
 ```
 
-* install_sdi.yml - Install Security Directory Integrator (SDI) v7.2 on host.
-* uninstall_sdi.yml - Manually Uninstall SDI on host
-* install_sdi_fixpack_FP0008.yml - Install product fix pack on host
-* install_isim_dispatcher.yml - Install ISIM RMI Dispatcher product on host
+// Primary playbooks 
+* install_sdi.yml - Install Security Directory Integrator (SDI) v7.2 on node.
+* install_sdi_and_dispatcher.yml - Install Security Directory Integrator (SDI) v7.2 and ISIM Dispatcher on node.
 
-
-
+// Secondary playbooks
+* shutdown_sdi.yml - Shutdown SDI on node
+* undeploy_sdi.yml - Manually Uninstall all instances of SDI on node
+* install_fixpack.yml - Install SDI v7.2 product fix pack on node
+* install_jvm.yml - Install IBM JVM for SDI on node
+* install_dispatcher.yml - Install ISIM RMI Dispatcher product on node
+* update_customjars.yml - Upload custom jars to {{ sdi_solution_directory }}/custom_jars
+* update_properties.yml - Update specific SDI global and solution properties on node
+* update_Dashboard_RESTSerivce_state.yml - Update Dashboard and REST state on SDI node

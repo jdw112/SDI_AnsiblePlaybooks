@@ -1,0 +1,29 @@
+---
+# Customized log4j2 
+    - name: Replace log4j2.xml in {{ sdi_root_dir }}/etc
+      copy:
+        src: log4j2.xml
+        dest: '{{ sdi_root_dir }}/etc'
+        force: yes
+       
+# Update tdisrvclt as FP0008 did not update it.
+    - name: Replace tdisrvctl-log4j2.xml in {{ sdi_root_dir }}/etc
+      copy:
+        src: tdisrvctl-log4j2.xml
+        dest: '{{ sdi_root_dir }}/etc'
+        force: yes
+
+    - name: Replace tdisrvctl in {{ sdi_root_dir }}/bin
+      copy:
+        src: tdisrvctl
+        dest: '{{ sdi_root_dir }}/bin'
+        
+#    - name: Copy some files to /etc/myapp/
+#      copy:
+#        src: '{{ ./files }}'
+#        dest: '{{ item.dest }}'
+#        with_items:
+#        - { src: log4j2.xml, dest: '{{ sdi_root_dir }}/etc/' }
+#        - { src: tdisrvctl-log4j2.xml, dest: '{{ sdi_root_dir }}/etc/' }
+#        - { src: tdisrvctl, dest: '{{ sdi_root_dir }}/bin/' }
+...

@@ -1,0 +1,9 @@
+---
+# tasks file for custom files
+
+    - name: Copy files to {{ sdi_solution_directory }}/customjars
+      include: custom_jars.yml
+
+    - name: Copy files to {{ sdi_solution_directory }}/configs
+      include: custom_xmls.yml
+...
