@@ -1,24 +1,24 @@
----  
-  # Install operating system prerequisites
-    - name: Install operating system prerequisites
-      yum:
-        name:
-          - glibc
-          - nss-softokn
-          - libXpm
-          - libXtst
-          - gtk2
-          - libcanberra-gtk2
-          - dejavu-lgc-sans-fonts
-        state: present 
-      when: ( ansible_distribution == "RedHat" and ansible_distribution_major_version >= '7' ) or 
-            ( ansible_distribution == "CentOS" and ansible_distribution_major_version >= '7' )
-      tags: 
-      - os_update
+---
+# Install operating system prerequisites
+- name: Install operating system prerequisites
+  yum:
+    name:
+      - glibc
+      - nss-softokn
+      - libXpm
+      - libXtst
+      - gtk2
+      - libcanberra-gtk2
+      - dejavu-lgc-sans-fonts
+    state: present
+  when:
+    ( ansible_distribution == "RedHat" and ansible_distribution_major_version >= '7' ) or
+    ( ansible_distribution == "CentOS" and ansible_distribution_major_version >= '7' )
+  tags:
+    - prereq_update
 
-    - name: Update all OS packages 
-      yum: name=* state=latest
-      when: ansible_os_family == "RedHat"
-      tags: 
-      - os_update
-...
+- name: Update all OS packages
+  yum: name=* state=latest
+  when: ansible_os_family == "RedHat"
+  tags:
+    - os_update

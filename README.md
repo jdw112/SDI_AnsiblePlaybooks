@@ -39,13 +39,18 @@ fix_pack_package_name=7.2.0-ISS-SDI-FP0008
 ibm_java_archive_package_name=ibm-java-jre-8.0-6.25-linux-x86_64.tgz
 ```
 
-### Customize Install image directory 
+### Install Image directory 
 Place the download items in the following directories.
 ```
 playbook/files/SDI_7.2_XLIN86_64_ML.tar  -  SDI Installer Image
 playbook/files/7.2.0-ISS-SDI-FP0008.zip  -  SDI Fix pack
 playbook/files/ibm-java-jre-8.0-6.25-linux-x86_64.tgz  -  IBM JVM 8 Update
 playbook/files/SIA_RMI_7140_SDI_7X_MP_ML.zip  -  ISIM RMI Dispatcher Install Image
+```
+### Avalable tags 
+```
+os_update  //Skip the request to update all operating system packages
+prereq_update  //Skip the install of prerequisites operating system packages 
 ```
 
 You're now ready to start using these playbooks.
@@ -59,6 +64,11 @@ You can use these playbooks as a base by cloning this repository.  Each of them 
 # For Example 
 $ cd SDI_AnsiblePlaybooks
 $ ansible-playbook playbooks/install_sdi.yml -i inventory.ini
+
+$ ansible-playbook playbooks/install_sdi.yml -i inventory.ini -e fix_pack_package_name=7.2.0-ISS-SDI-FP0008
+$ ansible-playbook playbooks/install_sdi.yml -i inventory.ini -e fix_pack_package_name=7.2.0-ISS-SDI-FP0007 --skip-tag os_update,prereq_update
+$ ansible-playbook playbooks/collect_versions.yml -i inventory.ini 
+$ ansible-playbook playbooks/install_fixpack.yml -i inventory.ini -e fix_pack_package_name=7.2.0-ISS-SDI-FP0007
 ```
 
 // Primary playbooks 
@@ -73,4 +83,4 @@ $ ansible-playbook playbooks/install_sdi.yml -i inventory.ini
 * install_dispatcher.yml - Install ISIM RMI Dispatcher product on node
 * update_customjars.yml - Upload custom jars to {{ sdi_solution_directory }}/custom_jars
 * update_properties.yml - Update specific SDI global and solution properties on node
-* update_Dashboard_RESTSerivce_state.yml - Update Dashboard and REST state on SDI node
+* update_dashboard_RESTSerivce_state.yml - Update Dashboard and REST state on SDI node
