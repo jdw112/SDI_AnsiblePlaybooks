@@ -1,25 +1,39 @@
 ---
-  # INSTALLING SDI FIXPACK 
-    - name: Extract fix pack into {{ tempdir.path }}
-      unarchive:
-        src: '{{ fix_pack_package_name }}.zip'
-        dest: '{{ tempdir.path }}'
+# INSTALLING SDI FIXPACK
+- name: Extract fix pack into {{ tempdir.path }}
+  unarchive:
+    src: '{{ fix_pack_package_name }}.zip'
+    dest: '{{ tempdir.path }}'
 
-    - name: Copy UpdateInstaller
-      copy:
-        src: '{{ tempdir.path }}/{{ fix_pack_package_name }}/UpdateInstaller.jar'
-        dest: '{{ sdi_root_dir }}/maintenance/'
-        remote_src: yes
-        force: yes
+- name: Copy UpdateInstaller
+  copy:
+    src: '{{ tempdir.path }}/{{ fix_pack_package_name }}/UpdateInstaller.jar'
+    dest: '{{ sdi_root_dir }}/maintenance/'
+    remote_src: yes
+    force: yes
 
-## TODO - execute bin files, if image < FP8
-## TODO - change zip name based on FP release
+- set_fact:
+    fixpack_ver: '{{ fix_pack_package_name[-2:] }}'
 
-    - name: Applying {{ fix_pack_package_name }}
-      command: "{{ item }} chdir={{ sdi_root_dir }}/"
-      with_items:
-      - ./bin/applyUpdates.sh -update {{ tempdir.path }}/{{fix_pack_package_name }}/SDI-7.2-FP0008.zip
-      - chmod 744 ./bin/updateLog4j.sh ./bin/removeAMC.sh
-      - ./bin/updateLog4j.sh
-      - ./bin/removeAMC.sh
-...
+#    - debug: msg='{{ fixpack_ver }}'
+
+- name: Applying {{ fix_pack_package_name }}
+  command: '{{ item }} chdir={{ sdi_root_dir }}/'
+  with_items:
+    - ./bin/applyUpdates.sh -update {{ tempdir.path }}/{{fix_pack_package_name }}/SDI-7.2-FP00{{ fixpack_ver }}.zip
+
+- name: Changing permissions for new {{ sdi_root_dir }}/bin assets
+  file:
+    path: '{{ sdi_root_dir }}/{{ item }}'
+    mode: 0744
+  with_items:
+    - bin/updateLog4j.sh
+    - bin/removeAMC.sh
+  when: fixpack_ver >= '08'
+
+- name: Execute post fixpack install scripts
+  command: '{{ item }} chdir={{ sdi_root_dir }}/'
+  with_items:
+    - ./bin/updateLog4j.sh
+    - ./bin/removeAMC.sh
+  when: fixpack_ver >= '08'
