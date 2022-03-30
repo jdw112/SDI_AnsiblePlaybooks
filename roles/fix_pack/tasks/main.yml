@@ -1,19 +1,18 @@
 ---
 # tasks file for fix_pack
 
-    - name: Create temporary build directory
-      include: pretask.yml
+- name: Create temporary build directory
+  include: pretask.yml
 
-    - name: Shutdown SDI Server if active
-      include: shutdown_sdi.yml
+- name: Shutdown SDI Server if active
+  include: shutdown_sdi.yml
 
-    - name: Install Fixpack  
-      include: install_fp.yml
-      
-    - name: Update Log4j2 resources
-      include: update_log4j.yml      
+- name: Install Fixpack
+  include: install_fp.yml
 
-    - name: Cleanup temporary build directory
-      include: removetmp.yml
+- name: Update Log4j2 resources
+  include: update_log4j.yml
+  when: fixpack_ver >= '08'
 
-...
+- name: Cleanup temporary build directory
+  include: removetmp.yml
