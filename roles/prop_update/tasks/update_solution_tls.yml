@@ -11,8 +11,8 @@
           # # Optional values for com.ibm.jsse2.overrideDefaultProtocol property (SSL_TLSv2, TLSv1,
           # # TLSv11,TLSv12). This is a single value property.
           # # ----------------------------------
-          com.ibm.di.SSLProtocols=TLSv1.2
-          com.ibm.di.SSLServerProtocols=TLSv1.2
+          com.ibm.di.SSLProtocols=TLSv1.3,TLSv1.2
+          com.ibm.di.SSLServerProtocols=TLSv1.3,TLSv1.2
           com.ibm.jsse2.overrideDefaultProtocol=TLSv12
           com.ibm.jsse2.overrideDefaultTLS=true
           # # ----- -----------------------------
@@ -25,4 +25,17 @@
           # # https://localhost:1098/rest
           # # ----------------------------------
           org.eclipse.equinox.http.jetty.ssl.protocol=TLSv1.2
+          
+          # # Setting TLSv1.3 as the default protocol in many cases when SDI is the client.
+          jdk.tls.client.protocols = TLSv1.3,TLSv1.2
+          # # Similar to above when SDI is the server, e.g. for the HTTP Server Connector
+          jdk.tls.server.protocols = TLSv1.3,TLSv1.2
+          # # For some WebService connectors and similar components using HttpsUrlConnection or URL.openStream()
+          https.protocols = TLSv1.3,TLSv1.2
+          # # For some mail components:
+          mail.smtp.ssl.protocols=TLSv1.3,TLSv1.2
+          
+          # # If there are problems, the following property can be used to help figure out the issue. 
+          # # This should be enabled sparingly and should only be used when SDI is invoked from command line:
+          # javax.net.debug=ssl:all
 
