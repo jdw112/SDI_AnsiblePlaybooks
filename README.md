@@ -63,12 +63,20 @@ You can use these playbooks as a base by cloning this repository.  Each of them 
 ```
 # For Example 
 $ cd SDI_AnsiblePlaybooks
+# Install SDI with default values
 $ ansible-playbook playbooks/install_sdi.yml -i inventory.ini
-
-$ ansible-playbook playbooks/install_sdi.yml -i inventory.ini -e fix_pack_package_name=7.2.0-ISS-SDI-FP0008
+# Install SDI with specific fixpack
 $ ansible-playbook playbooks/install_sdi.yml -i inventory.ini -e fix_pack_package_name=7.2.0-ISS-SDI-FP0007 --skip-tag os_update,prereq_update
+# Install SDI with customization
+$ ansible-playbook playbooks/install_sdi.yml -i inventory.ini -e sdi_root_dir=/opt/IBM/TDI/V7.2 -e sdi_solution_directory=/opt/IBM/TDI/SOLDIR -e sdi_rmi_port=1099 -e sdi_web_port=1098 -e sdi_system_store_port=1527 --skip-tag os_update,prereq_update
+# Collect version information
 $ ansible-playbook playbooks/collect_versions.yml -i inventory.ini 
+# Install specific fixpack to existing SDI server
 $ ansible-playbook playbooks/install_fixpack.yml -i inventory.ini -e fix_pack_package_name=7.2.0-ISS-SDI-FP0007
+# Update ports in an existing solution directory
+$ ansible-playbook playbooks/update_properties.yml -i inventory.ini -e sdi_root_dir=/opt/IBM/TDI/V7.2MINE -e sdi_solution_directory=/opt/IBM/TDI/SOLDIRMINE -e sdi_rmi_port=4099 -e sdi_web_port=4098 -e sdi_system_store_port=4527
+# Add certificate to truststore
+$ ansible-playbook playbooks/update_truststore.yml -i inventory.ini -e sdi_root_dir=/opt/IBM/TDI/V7.2 -e sdi_solution_directory=/opt/IBM/TDI/Sol72 -e import_ssl_from=github.com
 ```
 
 // Primary playbooks 
