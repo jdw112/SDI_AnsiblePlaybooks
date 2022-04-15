@@ -24,7 +24,7 @@
           # # https://localhost:1098/sdi
           # # https://localhost:1098/rest
           # # ----------------------------------
-          org.eclipse.equinox.http.jetty.ssl.protocol=TLSv1.3,TLSv1.2
+          org.eclipse.equinox.http.jetty.ssl.protocol=TLSv1.2
           
           # # Setting TLSv1.3 as the default protocol in many cases when SDI is the client.
           jdk.tls.client.protocols = TLSv1.3,TLSv1.2
