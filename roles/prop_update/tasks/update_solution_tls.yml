@@ -35,7 +35,9 @@
           # # For some mail components:
           mail.smtp.ssl.protocols=TLSv1.3,TLSv1.2
           
-          # # If there are problems, the following property can be used to help figure out the issue. 
-          # # This should be enabled sparingly and should only be used when SDI is invoked from command line:
+          # # If there are problems, the following 'javax.net.debug' property can be used to help 
+          # # investigation the issue. This should be enabled sparingly and should only be used 
+          # # when SDI is invoked from command line. The ssl trace content will be sent to stdout. 
+          # # Stdout can be captured by appending '-l /tmp/ssl_stdout.log' to the 'ibmdisrv' command.
           # javax.net.debug=ssl:all
 
